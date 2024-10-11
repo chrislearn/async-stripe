@@ -67,7 +67,7 @@ pub struct ApiErrors {
 }
 
 /// An enum representing the possible values of an `ApiErrors`'s `code` field.
-#[derive(Copy, Clone, Debug, Deserialize, Serialize, Eq, PartialEq)]
+#[derive(Clone, Debug, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "snake_case")]
 pub enum ApiErrorsCode {
     AccountClosed,
@@ -233,11 +233,13 @@ pub enum ApiErrorsCode {
     TransferSourceBalanceParametersMismatch,
     TransfersNotAllowed,
     UrlInvalid,
+    #[serde(untagged)]
+    Unknown(String),
 }
 
 impl ApiErrorsCode {
-    pub fn as_str(self) -> &'static str {
-        match self {
+    pub fn as_str(&self) -> &str {
+        match &self {
             ApiErrorsCode::AccountClosed => "account_closed",
             ApiErrorsCode::AccountCountryInvalidAddress => "account_country_invalid_address",
             ApiErrorsCode::AccountErrorCountryChangeRequiresAdditionalSteps => {
@@ -447,6 +449,7 @@ impl ApiErrorsCode {
             }
             ApiErrorsCode::TransfersNotAllowed => "transfers_not_allowed",
             ApiErrorsCode::UrlInvalid => "url_invalid",
+            ApiErrorsCode::Unknown(e) => e,
         }
     }
 }

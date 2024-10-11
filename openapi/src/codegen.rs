@@ -760,8 +760,8 @@ pub fn gen_enums(out: &mut String, enums: &BTreeMap<String, InferredEnum>, meta:
         out.push_str("impl ");
         out.push_str(enum_name);
         out.push_str(" {\n");
-        out.push_str("    pub fn as_str(self) -> &'static str {\n");
-        out.push_str("        match self {\n");
+        out.push_str("    pub fn as_str(&self) -> &str {\n");
+        out.push_str("        match &self {\n");
         for wire_name in &enum_.options {
             if wire_name.trim().is_empty() {
                 continue;
